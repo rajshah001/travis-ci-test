@@ -34,12 +34,13 @@ class DemoServer(ThreadingMixIn, HTTPServer):
     allow_reuse_address = True
 
     def __init__(self, port=PORT):
-        HTTPServer.__init__(self, ('localhost', int(port)),
+        HTTPServer.__init__(self, ('127.0.0.1', int(port)),
                             SimpleHTTPRequestHandler)
 
     def serve(self, directory=ROOT):
         chdir(directory)
-        print('Demo server starting on port %d.' % self.server_address[1])
+        print('Demo server starting on port %s.' % self.server_address[1])
+        print(self.server_address)
         try:
             server.serve_forever()
         except KeyboardInterrupt:
