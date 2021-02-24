@@ -1,7 +1,7 @@
 language: python
 
 python:
-  - "3.7"
+  - "3.9"
 
 addons:
   firefox: latest
@@ -20,6 +20,8 @@ script:
   - sudo mv -f ~/geckodriver /usr/local/share
   - sudo chmod +x /usr/local/share/geckodriver
   - sudo ln -s /usr/local/share/geckodriver /usr/local/bin/geckodriver
+  - sudo ss -tulwn
   - robot login_tests
+  - sudo ss -tulwn
   - pkill -f demoapp/server.py
   - nohup python -u ./demoapp/server.py > output.log &
