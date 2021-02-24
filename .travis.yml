@@ -11,7 +11,12 @@ install:
 script: 
   - chmod +x demoapp/server.py
   - nohup python /path/to/test.py > output.log &
-  - webdrivermanager firefox chrome --linkpath /usr/local/bin
+  - wget -N https://github.com/mozilla/geckodriver/releases/download/v0.26.0/geckodriver-v0.26.0-linux64.tar.gz -P ~/
+  - tar -xzf ~/geckodriver-v0.26.0-linux64.tar.gz -C ~/
+  - rm ~/geckodriver-v0.26.0-linux64.tar.gz
+  - sudo mv -f ~/geckodriver /usr/local/share
+  - sudo chmod +x /usr/local/share/geckodriver
+  - sudo ln -s /usr/local/share/geckodriver /usr/local/bin/geckodriver
   - robot login_tests
   - pkill -f demoapp/server.py
   - nohup python -u ./demoapp/server.py > output.log &
