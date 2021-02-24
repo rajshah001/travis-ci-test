@@ -13,7 +13,6 @@ install:
 # command to run tests
 script: 
   - sudo ufw allow 8080
-  - sleep 30
   - chmod +x demoapp/server.py
   - nohup python /path/to/test.py > output.log &
   - wget -N https://github.com/mozilla/geckodriver/releases/download/v0.29.0/geckodriver-v0.29.0-linux64.tar.gz -P ~/
@@ -22,6 +21,7 @@ script:
   - sudo mv -f ~/geckodriver /usr/local/share
   - sudo chmod +x /usr/local/share/geckodriver
   - sudo ln -s /usr/local/share/geckodriver /usr/local/bin/geckodriver
+  - sleep 30
   - sudo ss -tulwn
   - robot login_tests
   - sudo ss -tulwn
