@@ -14,7 +14,7 @@ install:
 script: 
   - sudo ufw allow 8080
   - chmod +x demoapp/server.py
-  - nohup python /path/to/test.py > output.log &
+  - nohup python demoapp/server.py > output.log &
   - wget -N https://github.com/mozilla/geckodriver/releases/download/v0.29.0/geckodriver-v0.29.0-linux64.tar.gz -P ~/
   - tar -xzf ~/geckodriver-v0.29.0-linux64.tar.gz -C ~/
   - rm ~/geckodriver-v0.29.0-linux64.tar.gz
