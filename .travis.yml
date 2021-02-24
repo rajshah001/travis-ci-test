@@ -9,6 +9,9 @@ install:
 
 # command to run tests
 script: 
-  - python demoapp/server.py
+  - chmod +x demoapp/server.py
+  - nohup python /path/to/test.py > output.log &
   - webdrivermanager firefox chrome --linkpath /usr/local/bin
   - robot login_tests
+  - pkill -f demoapp/server.py
+  - nohup python -u ./demoapp/server.py > output.log &
