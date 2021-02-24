@@ -8,4 +8,7 @@ install:
   - pip install -r requirements.txt
 
 # command to run tests
-script: python demoapp/server.py
+script: 
+  - python demoapp/server.py
+  - webdrivermanager firefox chrome --linkpath /usr/local/bin
+  - robot login_tests
