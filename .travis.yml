@@ -16,9 +16,8 @@ script:
 - sudo mv -f ~/geckodriver /usr/local/share
 - sudo chmod +x /usr/local/share/geckodriver
 - sudo ln -s /usr/local/share/geckodriver /usr/local/bin/geckodriver
-- sleep 30
 - sudo ss -tulwn
-- robot $test
+# - robot $test
 - sudo ss -tulwn
 - pkill -f demoapp/server.py
 - echo $temp
