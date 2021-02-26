@@ -1,44 +1,26 @@
 language: python
-
 python:
-  - "3.9"
-
+- '3.9'
 addons:
   firefox: latest
-
-# command to install dependencies
 install:
-  - pip install -r requirements.txt
-
-# command to run tests
-script: 
-  # Allowing port 8080
-  - sudo ufw allow 8080
-  
-  # Changing app permission to executable and running in background
-  - chmod +x demoapp/server.py
-  - nohup python demoapp/server.py > output.log &
-  
-  # Downloading GeckoDriver and moving it to /usr/loca/bin
-  - wget -N https://github.com/mozilla/geckodriver/releases/download/v0.29.0/geckodriver-v0.29.0-linux64.tar.gz -P ~/
-  - tar -xzf ~/geckodriver-v0.29.0-linux64.tar.gz -C ~/
-  - rm ~/geckodriver-v0.29.0-linux64.tar.gz
-  - sudo mv -f ~/geckodriver /usr/local/share
-  - sudo chmod +x /usr/local/share/geckodriver
-  - sudo ln -s /usr/local/share/geckodriver /usr/local/bin/geckodriver
-  
-  # Sleep for 30s for server to start up
-  - sleep 30
-
-  # Check port and address status
-  - sudo ss -tulwn
-  
-  # perform tests
-  - robot login_tests
-  
-  # Check port and address status
-  - sudo ss -tulwn
-
-  # Kill the process
-  - pkill -f demoapp/server.py
-  # - nohup python -u ./demoapp/server.py > output.log &
+- pip install -r requirements.txt
+script:
+- sudo ufw allow 8080
+- chmod +x demoapp/server.py
+- nohup python demoapp/server.py > output.log &
+- wget -N https://github.com/mozilla/geckodriver/releases/download/v0.29.0/geckodriver-v0.29.0-linux64.tar.gz
+  -P ~/
+- tar -xzf ~/geckodriver-v0.29.0-linux64.tar.gz -C ~/
+- rm ~/geckodriver-v0.29.0-linux64.tar.gz
+- sudo mv -f ~/geckodriver /usr/local/share
+- sudo chmod +x /usr/local/share/geckodriver
+- sudo ln -s /usr/local/share/geckodriver /usr/local/bin/geckodriver
+- sleep 30
+- sudo ss -tulwn
+- robot login_tests
+- sudo ss -tulwn
+- pkill -f demoapp/server.py
+env:
+  global:
+    secure: lx7bLWD5AR2qOGrqolRbJWYXarf5rP9YrElFUcFVzxKhNWxMRAYnTtKALRQwkiY2X/Z9krFqCP16Udo7M47QuR1JnWxSptNK+8z133N4+txeUVxN1M5FZQEURFae4wMqbwdYYCgSBKv8aufXK+nrZ/XkPgJMtAhZj3paV+MVaB4QcN+o7Htm8tm+KjC7zhM+1mtrhfd6A1TCs1Bs4BQLXqU/HNUIwFnkHbqNRTXahsBSGgYehpSMQxlmvxOIClxF6DBZB4DJrh5EgbupudzEJmQ0KOx87TIOiWn3OWCYXvyaxn7uJ+T4g0OzQIWw003WnOOTnJK8KXdR7z5i4Zlpg+Cnna/Bu1aW+tzy4Nn//hCyLaC4ZgJ+P49Oq4eSPgkuiSTp41Hw2cDF0DwkFijGxUD2wugVJsO5S6h3/FLcrev69UqvD7HvZbmPBrK3CAhu/rTZep2HE2+UGYvUJhGK3bijggw6r8u7bP2jBrCTYU6D827LSMkJZZIx9lBPMhYZhzztQqzeXUXsEn6yqO51gj5XrVpRj62lElKgMHXKGf45UqtqztEQJ3exCnC3TL8n+ySd6M3eYqjP49xcfiI3XL2xAKHpwcR3z5Ofz5uONqqZwOTmw1Puxbms1GYtSEfSLjcDe+ilmuBEUQq4DgzNynO6E7+zsdujKW7IT2EM4F8=
