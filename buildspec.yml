@@ -7,13 +7,14 @@ phases:
   pre_build:
     commands:
       - echo "Pre-Build Commands"
-      - apt-get update && apt-get install -y firefox wget
-      - export FIREFOX_BIN=/usr/bin/firefox
       - pip install -r requirements.txt
   build:
     commands:
-      - echo Build started on `date`
-      
+      # - sudo apt-get update && apt-get install -y firefox wget
+      # - export FIREFOX_BIN=/usr/bin/firefox
+      - sudo apt-get update
+      - sudo apt-get install firefox
+
       # Changing app permission to executable and running in background
       - chmod +x demoapp/server.py
       - nohup python demoapp/server.py > output.log &
