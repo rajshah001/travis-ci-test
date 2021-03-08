@@ -10,10 +10,10 @@ phases:
       - pip install -r requirements.txt
   build:
     commands:
-      # - sudo apt-get update && apt-get install -y firefox wget
-      # - export FIREFOX_BIN=/usr/bin/firefox
-      - sudo apt update
-      - sudo apt install firefox
+      - sudo apt-get update && apt-get install -y firefox wget
+      - export FIREFOX_BIN=/usr/bin/firefox
+      # - sudo apt update
+      # - sudo apt install firefox
 
       # Changing app permission to executable and running in background
       - chmod +x demoapp/server.py
