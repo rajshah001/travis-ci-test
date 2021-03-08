@@ -1,0 +1,33 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.8
+  pre_build:
+    commands:
+      - echo "Pre-Build Commands"
+      - apt-get update && apt-get install -y firefox wget
+      - export FIREFOX_BIN=/usr/bin/firefox
+      - pip install -r requirements.txt
+  build:
+    commands:
+      - echo Build started on `date`
+      
+      # Changing app permission to executable and running in background
+      - chmod +x demoapp/server.py
+      - nohup python demoapp/server.py > output.log &
+
+      # Downloading GeckoDriver and moving it to /usr/loca/bin
+      - wget -N https://github.com/mozilla/geckodriver/releases/download/v0.29.0/geckodriver-v0.29.0-linux64.tar.gz -P ~/
+      - tar -xzf ~/geckodriver-v0.29.0-linux64.tar.gz -C ~/
+      - rm ~/geckodriver-v0.29.0-linux64.tar.gz
+      - sudo mv -f ~/geckodriver /usr/local/share
+      - sudo chmod +x /usr/local/share/geckodriver
+      - sudo ln -s /usr/local/share/geckodriver /usr/local/bin/geckodriver
+
+      # perform tests
+      - robot login_tests
+
+      # Kill the process
+      - pkill -f demoapp/server.py
