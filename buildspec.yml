@@ -10,8 +10,8 @@ phases:
       - pip install -r requirements.txt
   build:
     commands:
-      - sudo apt update
-      - sudo apt install firefox wget -y
+      - apt-get update
+      - apt-get install firefox -y
       - export FIREFOX_BIN=/usr/bin/firefox
       # - sudo apt update
       # - sudo apt install firefox
