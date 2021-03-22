@@ -32,9 +32,9 @@ script:
 - pkill -f demoapp/server.py
 - ls -lah
 after_success:
-- aws s3 mv report.html s3://travis-log-website/${REPO}/${TRAVIS_BUILD_NUMBER}/${DATE}/ --acl public-read
-- aws s3 mv log.html s3://travis-log-website/${REPO}/${TRAVIS_BUILD_NUMBER}/${DATE}/ --acl public-read
-- aws s3 mv output.xml s3://travis-log-website/${REPO}/${TRAVIS_BUILD_NUMBER}/${DATE}/ --acl public-read
+- aws s3 cp report.html s3://travis-log-website/${REPO}/${TRAVIS_BUILD_NUMBER}/${DATE}/ --acl public-read
+- aws s3 cp log.html s3://travis-log-website/${REPO}/${TRAVIS_BUILD_NUMBER}/${DATE}/ --acl public-read
+- aws s3 cp output.xml s3://travis-log-website/${REPO}/${TRAVIS_BUILD_NUMBER}/${DATE}/ --acl public-read
 # - aws s3 mv <dir> s3://${REPO}/${TRAVIS_BUILD_NUMBER}/${DATE}/docs/ --recursive
 
 # deploy:
