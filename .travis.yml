@@ -1,44 +1,32 @@
 language: python
-
 python:
-  - "3.9"
-
+- '3.9'
 addons:
   firefox: latest
-
-# command to install dependencies
 install:
-  - pip install -r requirements.txt
-
-# command to run tests
-script: 
-  # Allowing port 8080
-  - sudo ufw allow 8080
-  
-  # Changing app permission to executable and running in background
-  - chmod +x demoapp/server.py
-  - nohup python demoapp/server.py > output.log &
-  
-  # Downloading GeckoDriver and moving it to /usr/loca/bin
-  - wget -N https://github.com/mozilla/geckodriver/releases/download/v0.29.0/geckodriver-v0.29.0-linux64.tar.gz -P ~/
-  - tar -xzf ~/geckodriver-v0.29.0-linux64.tar.gz -C ~/
-  - rm ~/geckodriver-v0.29.0-linux64.tar.gz
-  - sudo mv -f ~/geckodriver /usr/local/share
-  - sudo chmod +x /usr/local/share/geckodriver
-  - sudo ln -s /usr/local/share/geckodriver /usr/local/bin/geckodriver
-  
-  # Sleep for 30s for server to start up
-  - sleep 30
-
-  # Check port and address status
-  - sudo ss -tulwn
-  
-  # perform tests
-  - robot login_tests
-  
-  # Check port and address status
-  - sudo ss -tulwn
-
-  # Kill the process
-  - pkill -f demoapp/server.py
-  # - nohup python -u ./demoapp/server.py > output.log &
+- pip install -r requirements.txt
+script:
+- sudo ufw allow 8080
+- chmod +x demoapp/server.py
+- nohup python demoapp/server.py > output.log &
+- wget -N https://github.com/mozilla/geckodriver/releases/download/v0.29.0/geckodriver-v0.29.0-linux64.tar.gz
+  -P ~/
+- tar -xzf ~/geckodriver-v0.29.0-linux64.tar.gz -C ~/
+- rm ~/geckodriver-v0.29.0-linux64.tar.gz
+- sudo mv -f ~/geckodriver /usr/local/share
+- sudo chmod +x /usr/local/share/geckodriver
+- sudo ln -s /usr/local/share/geckodriver /usr/local/bin/geckodriver
+- sleep 30
+- sudo ss -tulwn
+- robot login_tests
+- sudo ss -tulwn
+- pkill -f demoapp/server.py
+deploy:
+  provider: s3
+  bucket: travis-log-website
+  skip_cleanup: true
+  upload-dir: travis-builds
+  access_key_id:
+    secure: dS/K+aGPa43+6Q8NGVBaZz7krO5KI7Y6ZCzNBJQN6WWOgqqsNdyxXNqGilel6wtIcYB5iFYgIo1aNIeJGvYPh/u+Gj3zOezLc6JNaBaecY64MazYy407S1MwbZhsq/mWzXQlcMTvaaGqPUyZVErbq8OCr5s5Hp1OiyeUw8d5dXib5PeQeCrcvJc2LAI+sHAB9FZoue0fJtgE2oMkPL9CzTfwdl8fv+mKWoF91cUSpJbqlgfbEalSclQPgoNbtghXDZ+mShIZ9SV9HwwRmz4m1Y99NQ/EY5fXfeeXyPEzBdQVaDTbiMb3k1X1O3E4PBrTy4zo97KJnFif76iJ7ckQS96rFkqh07rx1aug/7CTqB0Ra6uhOYxyLAIW6haItFq1b7Npv3IytLN6Xz4U8X0lihRUWINvNaTvqaLU8NC/Lq7zameRKKgLaCbwB3VWFK3MW7fZ5WLSurNX9QMcJdASFrJa7MzW9WzQc/fZZ7Z1U00oYrwezcvIQwRRAZSl4z+/dG/PXNbJ4SHNJtBmlUmhyM9r4GsMNkkBfUJarF+tOstZ391PSBKCur0FYF+0b1/PHgu47l5CYQC2tMxTNqgQeWmtxK4s1H7bciCXvIC6/8Ilrvr9Wtuxi+2/O7IfT2oWFUHw9jTnDLrtVPYQLe5HraNLoO2xTOWb0WHbXeyQx8A=
+  secret_access_key:
+    secure: DeQF0zgQTY/5T3sq4a22M6QYEFY3/ZAWn578xszmUdukG9ljIgCv25ZkHbI+a/j+p/F3lAw1Zf/lnkDSaD8tNvG1xSt5+0eTmMqxSPayGW6qcrSE+Youe0JundAdEfcSdHXpfjBR120CpucmuyCtGYOp6S7h5JKTwI6a+DcSLrqo+gotKkVTmCC0WzeclLdvM98F2AZYr5qx6Cbo10G57Q4mVvCTsKtSepwh6XErc8u2XQZqKT5M7zVChzaZ94eniaiepBgcEYUZgCXvjCYhw2bJ6LFz1qjegPQ784XyPpRQqjWqzB0xa55SHKzhsfnFbuAN8PTHI3j5G83Qs10EDNDnNbMgaJZAd1JDzVtf58YRJnAbRbr0VdO1ULyuZhyEtBvm15lJQSrinzbgEEsSAuYiI2vKugTCASKyS0qcp8LpRPu8U6KT4G7NEyN5QsZrFs9QTyh3VVI8dkvei0O36ZYK/157ysZj+e+vhfnw1t5QSTaVRKy84ibcfewzyQZTEuhQtldSQXNWk2Z5+IZuCH5ITDTGwq45uBGIrfYLZbY5K5e/NQ0y+JIFacADQBb2nrF8p2SNo5c80uoOyywbiZ0ttRBGeAoJGM+jQthzGsGVN9DNnw0BDNWtGc9toWfamHO+fHHannqXEBOQLVXSfQQ/KBvBVvM+pZROB+3Da/8=
