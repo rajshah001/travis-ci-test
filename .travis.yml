@@ -24,8 +24,9 @@ script:
 deploy:
   provider: s3
   bucket: travis-log-website
-  skip_cleanup: true
-  upload-dir: travis-builds
+  cleanup: false
+  upload-dir: ./travis-builds
+  region: ap-south-1
   access_key_id:
     secure: dS/K+aGPa43+6Q8NGVBaZz7krO5KI7Y6ZCzNBJQN6WWOgqqsNdyxXNqGilel6wtIcYB5iFYgIo1aNIeJGvYPh/u+Gj3zOezLc6JNaBaecY64MazYy407S1MwbZhsq/mWzXQlcMTvaaGqPUyZVErbq8OCr5s5Hp1OiyeUw8d5dXib5PeQeCrcvJc2LAI+sHAB9FZoue0fJtgE2oMkPL9CzTfwdl8fv+mKWoF91cUSpJbqlgfbEalSclQPgoNbtghXDZ+mShIZ9SV9HwwRmz4m1Y99NQ/EY5fXfeeXyPEzBdQVaDTbiMb3k1X1O3E4PBrTy4zo97KJnFif76iJ7ckQS96rFkqh07rx1aug/7CTqB0Ra6uhOYxyLAIW6haItFq1b7Npv3IytLN6Xz4U8X0lihRUWINvNaTvqaLU8NC/Lq7zameRKKgLaCbwB3VWFK3MW7fZ5WLSurNX9QMcJdASFrJa7MzW9WzQc/fZZ7Z1U00oYrwezcvIQwRRAZSl4z+/dG/PXNbJ4SHNJtBmlUmhyM9r4GsMNkkBfUJarF+tOstZ391PSBKCur0FYF+0b1/PHgu47l5CYQC2tMxTNqgQeWmtxK4s1H7bciCXvIC6/8Ilrvr9Wtuxi+2/O7IfT2oWFUHw9jTnDLrtVPYQLe5HraNLoO2xTOWb0WHbXeyQx8A=
   secret_access_key:
