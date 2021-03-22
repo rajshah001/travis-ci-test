@@ -29,7 +29,7 @@ script:
 - sleep 10
 - robot login_tests
 - pkill -f demoapp/server.py
-- ls -lah
+- ls -lah 
 after_success:
 - aws s3 cp report.html s3://travis-log-website/${REPO}/${TRAVIS_BUILD_NUMBER}/${DATE}/
   --acl public-read
@@ -37,3 +37,4 @@ after_success:
   --acl public-read
 - aws s3 cp output.xml s3://travis-log-website/${REPO}/${TRAVIS_BUILD_NUMBER}/${DATE}/
   --acl public-read
+- echo "https://travis-log-website.s3.ap-south-1.amazonaws.com/${REPO}/${TRAVIS_BUILD_NUMBER}/${DATE}/report.html"
