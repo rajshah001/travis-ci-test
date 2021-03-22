@@ -14,8 +14,10 @@ install:
 - pip install awscli
 script:
 - sudo ufw allow 8080
+# Changing app permission to executable and running in background
 - chmod +x demoapp/server.py
 - nohup python demoapp/server.py > output.log &
+# Downloading GeckoDriver and moving it to /usr/loca/bin
 - wget -N https://github.com/mozilla/geckodriver/releases/download/v0.29.0/geckodriver-v0.29.0-linux64.tar.gz
   -P ~/
 - tar -xzf ~/geckodriver-v0.29.0-linux64.tar.gz -C ~/
@@ -23,16 +25,16 @@ script:
 - sudo mv -f ~/geckodriver /usr/local/share
 - sudo chmod +x /usr/local/share/geckodriver
 - sudo ln -s /usr/local/share/geckodriver /usr/local/bin/geckodriver
-- sleep 30
-- sudo ss -tulwn
+- sleep 10
+# perform tests
 - robot login_tests
-- sudo ss -tulwn
+# Kill the process
 - pkill -f demoapp/server.py
 
 after_success:
-- aws s3 mv report.html s3://${REPO}/${TRAVIS_BUILD_NUMBER}/${DATE}/ --acl public-read
-- aws s3 mv log.html s3://${REPO}/${TRAVIS_BUILD_NUMBER}/${DATE}/ --acl public-read
-- aws s3 mv output.xml s3://${REPO}/${TRAVIS_BUILD_NUMBER}/${DATE}/ --acl public-read
+- aws s3 mv report.html s3://travis-log-website/${REPO}/${TRAVIS_BUILD_NUMBER}/${DATE}/ --acl public-read
+- aws s3 mv log.html s3://travis-log-website/${REPO}/${TRAVIS_BUILD_NUMBER}/${DATE}/ --acl public-read
+- aws s3 mv output.xml s3://travis-log-website/${REPO}/${TRAVIS_BUILD_NUMBER}/${DATE}/ --acl public-read
 # - aws s3 mv <dir> s3://${REPO}/${TRAVIS_BUILD_NUMBER}/${DATE}/docs/ --recursive
 
 # deploy:
