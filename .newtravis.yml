@@ -1,0 +1,69 @@
+language: python
+python:
+  - '3.9'
+env:
+  global:
+  - REPO=travis-ci-test
+  - AWS_DEFAULT_REGION=ap-south-1
+  - secure: ev6oAvzS9B0qeY7OqHgEAU0vB7FjgbOu247UIO3b8tEtHawwhODWMeKue1W7/KqSNjqPjKPJBj1LSf2O3S52ogrm0GcbL6nZuC/VlGE3lphAko/hE4TF+Ql9rdiVvJg+vp0faG9/kA3IARGVM8hwfRvQ29udT6Uc48QJ8gOXYDdNVa76/kP/DzczYXyV73TKGd9pby2N4TKEn9u80gogPLaIEV6trcgdw9r3ZmNSPO3tPVojb/3YbX8okk0pAao/rzyQDm8YGJqevqN2R1lMONb9xC2L06OIl4GqkI1Wuz5J90O0JgquEeob/PEP+yoIM7rPy5/fwhOpSYcvkzD4twIL34s4XMeGRgeJNNc+rTKxwWG/+1J/e/XJkL/n52heO7B9i7ejDYFzVPl90Uuulk0LHTqktnfpgZDKRNmxyeuHVe/ICJj6rruHbc4v+Y2fQuYaMMqYTp6+UgFhAHwTGsdVCe0xOywgYdd1ADhKuJGBnY47TtQOEUHEt4KY3g6qDC51cW9SfzGIgjy9KGNQmZhz5pnUrn1zyYyEIfDG82B1Fs27sj6HRyOowee4Q3gj6B1cJa2SXY1YJ3FNbHBz2hGwn/2L3if+YQrGRrfsJi5wE622xn9lLXgcQQOQbtHSJHyTz86Pin8TIVXhsQMH+iiNoMLGC3td4cKOTBXVZ2w=
+  - secure: awos/2Mxn5ycePitHeO67vS7/XFOplTce5do7rIUZCu3DJ+TfeeEyc0IPIaBk+EYfNhIAkGHYRfjI+wIys4mnsBhV9DjLUOBlGNPZFeBOqpHtTo0zA8PjBYRwhwOPR1qAApZ6afSTKwrb//YhgTLNtWk/euXNm54wVz17lo7aRonH++kXm1zLvhLgwjeKdlH2VPdjjB+fwOcRu5mBwxcadBGRcG/ZH/74J+k2/1xU/EfYs1NY4zQrfZhF0xKw4aAKLVO5f9rwf09/iC3h6C+97AH4EvEFLAMlIok90WDHbCBIH6m5CHAYe6+5sxvKSeBD84ZVC/cQ6x4a5GWTSD273bzQ/o0y5VO5tUf9m2jigthpwfkvIBD2LbJc3PFAF0XqRoci0tfOZjASIEqBAphhL3M0htWIs++5lbhoszXJ4OCMgDLZYeNPGNJB64L4oIaNjXY1dYQ+sWp1fzRCVx9a1hSo4Rz+THCMhZIkhSg4Ca9508mhih28/6/f6ldpt2Z1ntpyEqXE12AZ7G1+SNtqJxEa7iaLTj3Rm/NVqrjJ13+luFwTV7y6tOc517cMVFg/ukDAqIvO4mWEU0pOyARWsfmVarPreGUyLWWNN3y6ylwkTUuTXmArzz2XBAiritpEKzxBQEEOgss7f3n9XV3EyB+MHs/fyRO5ouPuLTJYFw=
+addons:
+  firefox: latest
+
+jobs:
+  include:
+  - name: "Robot Framework on Linux"
+    os: xenial
+    before_install:
+    - export TZ=Australia/Canberra
+    - DATE=$(date +%Y-%m-%d)
+    install:
+    - pip install -r requirements.txt
+    - pip install awscli
+    script:
+    - sudo ufw allow 8080
+    - chmod +x demoapp/server.py
+    - nohup python demoapp/server.py > output.log &
+    
+    - wget -N https://github.com/mozilla/geckodriver/releases/download/v0.29.0/geckodriver-v0.29.0-linux64.tar.gz
+      -P ~/
+    - tar -xzf ~/geckodriver-v0.29.0-linux64.tar.gz -C ~/
+    - rm ~/geckodriver-v0.29.0-linux64.tar.gz
+    - sudo mv -f ~/geckodriver /usr/local/share
+    - sudo chmod +x /usr/local/share/geckodriver
+    - sudo ln -s /usr/local/share/geckodriver /usr/local/bin/geckodriver
+    
+    - sleep 10
+    - robot login_tests
+    - pkill -f demoapp/server.py
+    - ls -lah 
+    after_success:
+    - aws s3 cp report.html s3://travis-log-website/${REPO}/${TRAVIS_BUILD_NUMBER}/${DATE}/
+      --acl public-read
+    - aws s3 cp log.html s3://travis-log-website/${REPO}/${TRAVIS_BUILD_NUMBER}/${DATE}/
+      --acl public-read
+    - aws s3 cp output.xml s3://travis-log-website/${REPO}/${TRAVIS_BUILD_NUMBER}/${DATE}/
+      --acl public-read
+    - aws s3 mv docs s3://travis-log-website/${REPO}/${TRAVIS_BUILD_NUMBER}/${DATE}/ --recursive
+      --acl public-read
+    - "echo https://travis-log-website.s3.ap-south-1.amazonaws.com/${REPO}/${TRAVIS_BUILD_NUMBER}/${DATE}/report.html"
+
+  - name: "Python 3.8.0 on Windows"
+      os: windows           # Windows 10.0.17134 N/A Build 17134
+      language: shell       # 'language: python' is an error on Travis CI Windows
+      before_install:
+        - choco install python --version 3.8.0
+        - python --version
+        - python -m pip install --upgrade pip
+      env: PATH=/c/Python38:/c/Python38/Scripts:$PATH=
+      install:
+        - pip install -r requirements.txt
+        - pip install awscli
+        - pip install webdrivermanager
+      script:
+        - dir
+        - mkdir C:\bin
+        - webdrivermanager firefox chrome --linkpath C:\bin
+        - python ${filename}.py
+        - robot login_tests
+        
