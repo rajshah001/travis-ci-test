@@ -1,3 +1,6 @@
+language: python
+python:
+  - '3.9'
 env:
   global:
   - REPO=travis-ci-test
@@ -11,9 +14,6 @@ jobs:
   include:
   - name: "Robot Framework on Linux"
     os: xenial
-    language: python
-    python:
-    - '3.9'
     before_install:
     - export TZ=Australia/Canberra
     - DATE=$(date +%Y-%m-%d)
