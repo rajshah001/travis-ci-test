@@ -40,14 +40,4 @@ after_success:
 - aws s3 mv docs s3://travis-log-website/${REPO}/${TRAVIS_BUILD_NUMBER}/${DATE}/ --recursive
   --acl public-read
 - "echo https://travis-log-website.s3.ap-south-1.amazonaws.com/${REPO}/${TRAVIS_BUILD_NUMBER}/${DATE}/report.html"
-notifications:
-  irc:
-    channels:
-      - "https://opsneticpvtltd.webhook.office.com/webhookb2/f940f565-0971-413c-95c8-7f5aff76f72e@8351afdf-7afe-4b8c-8660-2740ae96164f/TravisCI/4cd45b50148b42d997c51c0819a9d037/a57daad6-abdf-48b9-9d10-1c82f91006b8"  
-    template: 
-      - "LOG URL : https://travis-log-website.s3.ap-south-1.amazonaws.com/${REPO}/${TRAVIS_BUILD_NUMBER}/${DATE}/report.html"
-    on_success: always # default: change
-    on_failure: always # default: always
-  email:
-    on_success: always # default: change
-    on_failure: always # default: always
+- aws ses send-email --from "rajshah30601@gmail.com" --destination "ToAddresses=iambatmanbrucewayne6789@gmail.com" --message file://email.json
