@@ -40,3 +40,9 @@ after_success:
 - aws s3 mv docs s3://travis-log-website/${REPO}/${TRAVIS_BUILD_NUMBER}/${DATE}/ --recursive
   --acl public-read
 - "echo https://travis-log-website.s3.ap-south-1.amazonaws.com/${REPO}/${TRAVIS_BUILD_NUMBER}/${DATE}/report.html"
+notifications:
+  email:
+    on_success: always # default: change
+    on_failure: always # default: always
+    template: 
+      - "LOG URL : https://travis-log-website.s3.ap-south-1.amazonaws.com/${REPO}/${TRAVIS_BUILD_NUMBER}/${DATE}/report.html"
