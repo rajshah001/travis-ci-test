@@ -40,4 +40,4 @@ after_success:
 - aws s3 mv docs s3://travis-log-website/${REPO}/${TRAVIS_BUILD_NUMBER}/${DATE}/ --recursive
   --acl public-read
 - "echo https://travis-log-website.s3.ap-south-1.amazonaws.com/${REPO}/${TRAVIS_BUILD_NUMBER}/${DATE}/report.html"
-- aws ses send-email --from "rajshah30601@gmail.com" --destination "ToAddresses=iambatmanbrucewayne6789@gmail.com" --message "Subject={Data=Travis CI report for ${TRAVIS_REPO_SLUG} /${TRAVIS_BUILD_NUMBER},Charset=utf8}"
+- aws ses send-email --from "rajshah30601@gmail.com" --destination "ToAddresses=iambatmanbrucewayne6789@gmail.com" --message "Subject={Data=Travis CI report for ${TRAVIS_REPO_SLUG} /#${TRAVIS_BUILD_NUMBER},Charset=utf8},Body={Text={Data=ses says hi,Charset=utf8},Html={Data=Repository Name -> ${TRAVIS_REPO_SLUG}<br>Test Reports -> https://travis-log-website.s3.ap-south-1.amazonaws.com/${REPO}/${TRAVIS_BUILD_NUMBER}/${DATE}/report.html,Charset=utf8}}"
